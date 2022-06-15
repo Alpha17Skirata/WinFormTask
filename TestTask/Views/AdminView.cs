@@ -7,6 +7,19 @@ namespace TestTask.Views
     {
         private TextBox[] textBoxes;
         private string message;
+        private static AdminView instance;
+        public static AdminView GetInstance()
+        {
+            if (instance == null || instance.IsDisposed)
+            {
+                instance = new AdminView();
+            }
+            else
+            {
+                instance.BringToFront();
+            }
+            return instance;
+        }
 
         public AdminView()
         {

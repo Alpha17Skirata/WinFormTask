@@ -13,37 +13,24 @@ namespace TestTask.Presenters
 {
     public class Presenter
     {
-        private ITaskRepository phoneBook;
+        private ITaskRepository repository;
         private IAdminView adminView;
         private IUserView userView;
         private BindingSource bindingSource;
         private IEnumerable<UserFormViewModel> userFormViewModels;
-        private string connection;
 
-        public Presenter(string connection, IUserView userView)
+        public Presenter(ITaskRepository repository, IUserView userView, IAdminView adminView)
         {
             this.bindingSource = new BindingSource();
-            this.phoneBook = new TaskRepository(connection);
-            this.connection = connection;
+            this.repository = repository;
             this.userView = userView;
             this.userView.SearchEvent += SearchHuman;
             this.userView.BackEvent += BackUserPage;
             this.userView.SetHumanListBindingSource(bindingSource);
-            this.userView.Show();
-        }
-
-       
-
-        public Presenter(string connection, IAdminView adminView)
-        {
-            this.bindingSource = new BindingSource();
-            this.phoneBook = new TaskRepository(connection);
-            this.connection = connection;
             this.adminView = adminView;
             this.adminView.SaveEvent += SaveNewHuman;
             this.adminView.BackEvent += BackAdminPage;
             this.adminView.CancelEvent += CleanForms;
-            this.adminView.Show();
         }
 
         private void CleanForms(object sender, EventArgs e)
@@ -54,16 +41,14 @@ namespace TestTask.Presenters
         private void BackUserPage(object sender, EventArgs e)
         {
             userView.Hide();
-            IAunthenticationView aunthenticationView = new Authentication();
-            new MainPresenter(aunthenticationView, connection);
+            IAunthenticationView aunthenticationView = Authentication.GetInstance();
             aunthenticationView.Show();
         }
 
         private void BackAdminPage(object sender, EventArgs e)
         {
             adminView.Hide();
-            IAunthenticationView aunthenticationView = new Authentication();
-            new MainPresenter(aunthenticationView, connection);
+            IAunthenticationView aunthenticationView = Authentication.GetInstance();
             aunthenticationView.Show();
         }
 
@@ -78,7 +63,7 @@ namespace TestTask.Presenters
             userFormViewModel.AddressName = userView.Address.Trim(' ');
             userFormViewModel.HouseNumber = int.TryParse(userView.HouseNumber, out _) ? Convert.ToInt32(userView.HouseNumber) : null;
             userFormViewModel.Flat = int.TryParse(userView.Flat, out _) ? Convert.ToInt32(userView.Flat) : null;
-            userFormViewModels = phoneBook.SearchUsingConditions(userFormViewModel);
+            userFormViewModels = repository.SearchUsingConditions(userFormViewModel);
             bindingSource.DataSource = userFormViewModels;
         }
 
@@ -99,7 +84,7 @@ namespace TestTask.Presenters
                 ValidateData validation = new ValidateData();
                 validation.Validate(humanModel);
                 validation.Validate(addressModel);
-                phoneBook.Add(humanModel, addressModel);
+                repository.Add(humanModel, addressModel);
                 adminView.Message = "Запись добавлена";
                 CleanViewFields();
             }

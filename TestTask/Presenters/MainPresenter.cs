@@ -11,28 +11,30 @@ namespace TestTask.Repository
     public class MainPresenter
     {
         private IAunthenticationView aunthenticationView;
-        private readonly string sqlConnection;
+        private IAdminView adminView;
+        private IUserView userView;
 
         public MainPresenter(IAunthenticationView aunthenticationView, string sqlConnection)
         {
             this.aunthenticationView = aunthenticationView;
-            this.sqlConnection = sqlConnection;
             this.aunthenticationView.OpenAdminEvent += ShowAdminEvent;
             this.aunthenticationView.OpenUserEvent += ShowUserEvent;
-        }
+            this.adminView = AdminView.GetInstance();
+            this.userView = UserView.GetInstance();
+            ITaskRepository repository = new TaskRepository(sqlConnection);
+            new Presenter(repository, userView, adminView);
+    }
 
         private void ShowUserEvent(object sender, EventArgs e)
         {
-            IUserView userView = new UserView();
-            new Presenter(sqlConnection, userView);
             aunthenticationView.Hide();
+            userView.Show();
         }
 
         private void ShowAdminEvent(object sender, EventArgs e)
         {
-            IAdminView adminView = new AdminView();
-            new Presenter(sqlConnection, adminView);
             aunthenticationView.Hide();
+            adminView.Show();
         }
     }
 }

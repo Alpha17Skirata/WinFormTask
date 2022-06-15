@@ -14,6 +14,19 @@ namespace TestTask
     public partial class UserView : Form, IUserView
     {
         private TextBox[] textBoxes;
+        private static UserView instance;
+        public static UserView GetInstance()
+        {
+            if (instance == null || instance.IsDisposed)
+            {
+                instance = new UserView();
+            }
+            else
+            {
+                instance.BringToFront();
+            }
+            return instance;
+        }
         public UserView()
         {
             InitializeComponent();
@@ -122,6 +135,10 @@ namespace TestTask
             if (!((character >= 'А' && character <= 'я') || character == 'ё' || character == 'Ё') && character != 8)
             {
                 e.Handled = true;
+            }
+            if (textNumber.Text.Length == 1)
+            {
+                e.KeyChar = Char.ToUpper(e.KeyChar);
             }
         }
 

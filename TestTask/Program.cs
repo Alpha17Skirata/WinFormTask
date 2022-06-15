@@ -22,8 +22,7 @@ namespace TestTask
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             string connection = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
-            ITaskRepository adminRepository = new TaskRepository(connection);
-            IAunthenticationView aunthenticationView = new Authentication();
+            IAunthenticationView aunthenticationView = Authentication.GetInstance();
             new MainPresenter(aunthenticationView, connection);
             Application.Run((Form)aunthenticationView);
         }
