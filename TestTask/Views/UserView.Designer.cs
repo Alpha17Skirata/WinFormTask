@@ -30,6 +30,7 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label10 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.changeUserRole = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -52,7 +53,6 @@
             this.searchButton = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.label10 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -85,6 +85,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(264, 628);
             this.panel1.TabIndex = 0;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label10.Location = new System.Drawing.Point(11, 364);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(178, 21);
+            this.label10.TabIndex = 43;
+            this.label10.Text = "Формат номера: х-хх-хх";
             // 
             // panel2
             // 
@@ -225,6 +235,7 @@
             this.textNumber.Name = "textNumber";
             this.textNumber.Size = new System.Drawing.Size(234, 20);
             this.textNumber.TabIndex = 35;
+            this.textNumber.TextChanged += new System.EventHandler(this.textNumber_TextChanged_1);
             this.textNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.text_KeyDown);
             this.textNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumber_KeyPress);
             // 
@@ -253,6 +264,7 @@
             this.textBirthdayDate.Name = "textBirthdayDate";
             this.textBirthdayDate.Size = new System.Drawing.Size(233, 20);
             this.textBirthdayDate.TabIndex = 33;
+            this.textBirthdayDate.TextChanged += new System.EventHandler(this.textBirthdayDate_TextChanged);
             this.textBirthdayDate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.text_KeyDown);
             this.textBirthdayDate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumber_KeyPress);
             // 
@@ -311,16 +323,6 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(264, 99);
             this.panel4.TabIndex = 43;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(11, 364);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(178, 21);
-            this.label10.TabIndex = 43;
-            this.label10.Text = "Формат номера: х-хх-хх";
             // 
             // UserView
             // 

@@ -176,6 +176,7 @@
             this.textBirthdayDate.Name = "textBirthdayDate";
             this.textBirthdayDate.Size = new System.Drawing.Size(230, 20);
             this.textBirthdayDate.TabIndex = 16;
+            this.textBirthdayDate.TextChanged += new System.EventHandler(this.textBirthdayDate_TextChanged);
             this.textBirthdayDate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.text_KeyDown);
             this.textBirthdayDate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBirthdayDate_KeyPress);
             // 
@@ -195,6 +196,7 @@
             this.textNumber.Name = "textNumber";
             this.textNumber.Size = new System.Drawing.Size(230, 20);
             this.textNumber.TabIndex = 18;
+            this.textNumber.TextChanged += new System.EventHandler(this.textNumber_TextChanged);
             this.textNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.text_KeyDown);
             this.textNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumber_KeyPress);
             // 

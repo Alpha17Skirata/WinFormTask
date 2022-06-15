@@ -118,5 +118,29 @@ namespace TestTask.Views
                 e.Handled = true;
             }
         }
+
+        private void textNumber_TextChanged(object sender, EventArgs e)
+        {
+            if (textNumber.Text.Length == 1 || textNumber.Text.Length == 4)
+            {
+                textNumber.AppendText("-");
+            }
+            if (textNumber.Text.Length >= 8)
+            {
+                textNumber.Clear();
+            }
+        }
+
+        private void textBirthdayDate_TextChanged(object sender, EventArgs e)
+        {
+            if (textBirthdayDate.Text.Length == 2 || textBirthdayDate.Text.Length == 5)
+            {
+                textBirthdayDate.AppendText(".");
+            }
+            if (textBirthdayDate.Text.Length >= 11)
+            {
+                textBirthdayDate.Clear();
+            }
+        }
     }
 }

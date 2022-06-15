@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="Views\IAdminView.cs" />
     <Compile Include="Views\IAunthenticationView.cs" />
+    <Compile Include="Views\IPasswordForm.cs" />
     <Compile Include="Views\IUserView.cs" />
     <Compile Include="Views\UserView.cs">
       <SubType>Form</SubType>
