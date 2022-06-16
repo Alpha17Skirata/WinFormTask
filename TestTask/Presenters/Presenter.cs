@@ -55,9 +55,9 @@ namespace TestTask.Presenters
         private void SearchHuman(object sender, EventArgs e)
         {
             var userFormViewModel = new UserFormViewModel();
-            userFormViewModel.Name = userView.HumanName;
-            userFormViewModel.Surname = userView.Surname;
-            userFormViewModel.MiddleName = userView.MiddleName;
+            userFormViewModel.Name = ToUpperFirstLetter(userView.HumanName);
+            userFormViewModel.Surname = ToUpperFirstLetter(userView.Surname);
+            userFormViewModel.MiddleName = ToUpperFirstLetter(userView.MiddleName);
             userFormViewModel.Birthday = DateTime.TryParse(userView.Date, out _) ? Convert.ToDateTime(userView.Date) : null;
             userFormViewModel.Number = userView.Number;
             userFormViewModel.AddressName = userView.Address.Trim(' ');
@@ -71,9 +71,9 @@ namespace TestTask.Presenters
         {
             var humanModel = new Human();
             var addressModel = new Address();
-            humanModel.Name = adminView.HumanName;
-            humanModel.Surname = adminView.Surname;
-            humanModel.MiddleName = adminView.MiddleName;
+            humanModel.Name = ToUpperFirstLetter(adminView.HumanName);
+            humanModel.Surname = ToUpperFirstLetter(adminView.Surname);
+            humanModel.MiddleName = ToUpperFirstLetter(adminView.MiddleName);
             humanModel.Birthday = DateTime.TryParse(adminView.Date, out _) ? Convert.ToDateTime(adminView.Date) : null;
             humanModel.Number = adminView.Number;
             humanModel.HouseNumber = int.TryParse(adminView.HouseNumber, out _) ? Convert.ToInt32(adminView.HouseNumber) : null; 
@@ -104,6 +104,18 @@ namespace TestTask.Presenters
             adminView.Address = "";
             adminView.HouseNumber = "";
             adminView.Flat = "";
+        }
+
+        private string ToUpperFirstLetter(string source)
+        {
+            if (string.IsNullOrEmpty(source))
+            {
+                return source;
+            }
+            source = source.ToLower();
+            char[] letters = source.ToCharArray();
+            letters[0] = char.ToUpper(letters[0]);
+            return new string(letters);
         }
     }
 }

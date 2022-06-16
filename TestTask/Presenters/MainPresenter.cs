@@ -19,8 +19,8 @@ namespace TestTask.Repository
             this.aunthenticationView = aunthenticationView;
             this.aunthenticationView.OpenAdminEvent += ShowAdminEvent;
             this.aunthenticationView.OpenUserEvent += ShowUserEvent;
-            this.adminView = AdminView.GetInstance();
-            this.userView = UserView.GetInstance();
+            this.adminView = new AdminView();
+            this.userView = new UserView();
             ITaskRepository repository = new TaskRepository(sqlConnection);
             new Presenter(repository, userView, adminView);
     }

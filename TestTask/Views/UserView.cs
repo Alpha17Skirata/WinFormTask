@@ -14,19 +14,6 @@ namespace TestTask
     public partial class UserView : Form, IUserView
     {
         private TextBox[] textBoxes;
-        private static UserView instance;
-        public static UserView GetInstance()
-        {
-            if (instance == null || instance.IsDisposed)
-            {
-                instance = new UserView();
-            }
-            else
-            {
-                instance.BringToFront();
-            }
-            return instance;
-        }
         public UserView()
         {
             InitializeComponent();
