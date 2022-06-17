@@ -27,9 +27,6 @@ namespace TestTask.Model
       [RegularExpression(@"^\d{1}-\d{2}-\d{2}$", ErrorMessage = "Введите номер в формате х-хх-хх")]
       public string Number { get; set; }
       public int AddressId { get; set; }
-      [Required(ErrorMessage = "Введите номер дома")]
-      [RegularExpression(@"^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])$", ErrorMessage = "Номер дома должен быть от 1 до 999")]
-      public int? HouseNumber { get; set; }
       [Required(ErrorMessage = "Введите номер квартиры")]
       [RegularExpression(@"^([1-9]|[1-9][0-9]|[1-9][0-9][0-9])$", ErrorMessage = "Номер квартиры должен быть от 1 до 999")]
       public int? Flat { get; set; }

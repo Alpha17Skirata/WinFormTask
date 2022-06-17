@@ -43,8 +43,9 @@ namespace TestTask.Repository
                 }
                 else
                 {
-                    command.CommandText = "SELECT * FROM dbo.Addresses WHERE Name=@AddressName;";
+                    command.CommandText = "SELECT * FROM dbo.Addresses WHERE Name=@AddressName AND House_number=@houseNumber;";
                     command.Parameters.Add("@AddressName", SqlDbType.NVarChar).Value = address.AddressName;
+                    command.Parameters.Add("@houseNumber", SqlDbType.Int).Value = address.HouseNumber;
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -52,27 +53,28 @@ namespace TestTask.Repository
                             var addressModel = new Address();
                             addressModel.Id = (int)reader[0];
                             addressModel.AddressName = reader[1].ToString();
+                            addressModel.HouseNumber = (int)reader[2];
                             dbAddress.Add(addressModel);
                         }
                     }
                     if (dbAddress.Count == 0)
                     {
-                        command.CommandText = "INSERT INTO dbo.Addresses values (@Address_name); SELECT CAST(scope_identity() AS int);";
+                        command.CommandText = "INSERT INTO dbo.Addresses values (@Address_name, @house_Number); SELECT CAST(scope_identity() AS int);";
                         command.Parameters.Add("@Address_name", SqlDbType.NVarChar).Value = address.AddressName;
+                        command.Parameters.Add("@house_Number", SqlDbType.Int).Value = address.HouseNumber;
                         id = (int)command.ExecuteScalar();
                     }
                     else
                     {
                         id = dbAddress.ElementAt(0).Id;
                     }
-                    command.CommandText = "INSERT INTO dbo.Humen values (@name, @surname, @middlename, @birthday, @phoneNumber, @addressId, @houseNumber, @flat)";
+                    command.CommandText = "INSERT INTO dbo.Humen values (@name, @surname, @middlename, @birthday, @phoneNumber, @addressId, @flat)";
                     command.Parameters.Add("@name", SqlDbType.NVarChar).Value = human.Name;
                     command.Parameters.Add("@surname", SqlDbType.NVarChar).Value = human.Surname;
                     command.Parameters.Add("@middlename", SqlDbType.NVarChar).Value = human.MiddleName;
                     command.Parameters.Add("@birthday", SqlDbType.Date).Value = human.Birthday;
                     command.Parameters.Add("@phoneNumber", SqlDbType.NVarChar).Value = human.Number;
                     command.Parameters.Add("@addressId", SqlDbType.Int).Value = id;
-                    command.Parameters.Add("@houseNumber", SqlDbType.Int).Value = human.HouseNumber;
                     command.Parameters.Add("@flat", SqlDbType.Int).Value = human.Flat;
                     command.ExecuteNonQuery();
                 }
@@ -89,14 +91,14 @@ namespace TestTask.Repository
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "SELECT h.Name, h.Surname, h.Middle_name, h.Birthday, h.PhoneNumber, a.Name, h.House_number, h.Flat FROM dbo.Humen as h JOIN dbo.Addresses as a on h.Address_id=a.Id " +
+                command.CommandText = "SELECT h.Name, h.Surname, h.Middle_name, h.Birthday, h.PhoneNumber, a.Name, a.House_number, h.Flat FROM dbo.Humen as h JOIN dbo.Addresses as a on h.Address_id=a.Id " +
                                       "WHERE (h.Name = @humanName OR @humanName IS NULL) " +
                                       "AND (h.Surname = @surname OR @surname IS NULL) " +
                                       "AND (h.Middle_name = @middleName OR @middleName IS NULL) " +
                                       "AND (h.Birthday = @birthday OR @birthday IS NULL) " +
                                       "AND (h.PhoneNumber = @phoneNumber OR @phoneNumber IS NULL) " +
                                       "AND (a.Name = @addressName OR @addressName IS NULL) " +
-                                      "AND (h.House_number = @houseNumber OR @houseNumber IS NULL) " +
+                                      "AND (a.House_number = @houseNumber OR @houseNumber IS NULL) " +
                                       "AND (h.Flat = @flat OR @flat IS NULL);";
                 command.Parameters.Add("@humanName", SqlDbType.NVarChar).Value = model.Name.Equals("") ? DBNull.Value : model.Name;
                 command.Parameters.Add("@surname", SqlDbType.NVarChar).Value = model.Surname.Equals("") ? DBNull.Value : model.Surname;

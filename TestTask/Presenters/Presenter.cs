@@ -76,9 +76,9 @@ namespace TestTask.Presenters
             humanModel.MiddleName = ToUpperFirstLetter(adminView.MiddleName);
             humanModel.Birthday = DateTime.TryParse(adminView.Date, out _) ? Convert.ToDateTime(adminView.Date) : null;
             humanModel.Number = adminView.Number;
-            humanModel.HouseNumber = int.TryParse(adminView.HouseNumber, out _) ? Convert.ToInt32(adminView.HouseNumber) : null; 
             humanModel.Flat = int.TryParse(adminView.HouseNumber, out _) ? Convert.ToInt32(adminView.HouseNumber) : null; 
             addressModel.AddressName = adminView.Address.Trim(' ');
+            addressModel.HouseNumber = int.TryParse(adminView.HouseNumber, out _) ? Convert.ToInt32(adminView.HouseNumber) : null;
             try
             {
                 ValidateData validation = new ValidateData();
