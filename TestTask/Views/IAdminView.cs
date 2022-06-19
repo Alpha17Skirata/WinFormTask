@@ -23,6 +23,7 @@ namespace TestTask.Views
         event EventHandler CancelEvent;
         event EventHandler SaveEvent;
         event EventHandler BackEvent;
+        event EventHandler ChangePasswordEvent;
 
         void Show();
         void Hide();

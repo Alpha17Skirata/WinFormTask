@@ -52,9 +52,12 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.changePasswordBtn = new System.Windows.Forms.Button();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // textHumanName
@@ -69,6 +72,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.SlateBlue;
+            this.panel1.Controls.Add(this.panel4);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
@@ -287,6 +291,24 @@
             this.panel3.Size = new System.Drawing.Size(203, 71);
             this.panel3.TabIndex = 2;
             // 
+            // changePasswordBtn
+            // 
+            this.changePasswordBtn.Location = new System.Drawing.Point(12, 24);
+            this.changePasswordBtn.Name = "changePasswordBtn";
+            this.changePasswordBtn.Size = new System.Drawing.Size(108, 23);
+            this.changePasswordBtn.TabIndex = 26;
+            this.changePasswordBtn.Text = "Изменить пароль";
+            this.changePasswordBtn.UseVisualStyleBackColor = true;
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.Indigo;
+            this.panel4.Controls.Add(this.changePasswordBtn);
+            this.panel4.Location = new System.Drawing.Point(0, 339);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(137, 71);
+            this.panel4.TabIndex = 28;
+            // 
             // AdminView
             // 
             this.AcceptButton = this.saveBtn;
@@ -323,6 +345,7 @@
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -354,5 +377,7 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Button changePasswordBtn;
     }
 }

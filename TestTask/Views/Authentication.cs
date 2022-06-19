@@ -35,11 +35,11 @@ namespace TestTask
         private void AssociateAndRaiseViewEvents()
         {
             userButton.Click += delegate { OpenUserEvent?.Invoke(this, EventArgs.Empty); };
-            adminButton.Click += delegate { OpenAdminEvent?.Invoke(this, EventArgs.Empty); };
+            adminButton.Click += delegate { OpenCheckPasswordEvent?.Invoke(this, EventArgs.Empty); };
         }
 
         public event EventHandler OpenUserEvent;
-        public event EventHandler OpenAdminEvent;
+        public event EventHandler OpenCheckPasswordEvent;
 
         protected override void OnClosed(EventArgs e)
         {

@@ -9,7 +9,7 @@ namespace TestTask.Views
     public interface IAunthenticationView
     {
         public event EventHandler OpenUserEvent;
-        public event EventHandler OpenAdminEvent;
+        public event EventHandler OpenCheckPasswordEvent;
 
         void Show();
         void Hide();

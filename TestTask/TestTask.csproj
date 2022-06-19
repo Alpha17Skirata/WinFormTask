@@ -71,9 +71,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Address.cs" />
+    <Compile Include="Model\Password.cs" />
     <Compile Include="Model\UserFormViewModel.cs" />
     <Compile Include="Presenters\Presenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
+    <Compile Include="Repository\IPasswordRepository.cs" />
+    <Compile Include="Repository\PasswordRepository.cs" />
     <Compile Include="Repository\TaskRepository.cs" />
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\ITaskRepository.cs" />
@@ -91,9 +94,22 @@
     <Compile Include="Views\AdminView.Designer.cs">
       <DependentUpon>AdminView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\ChangePasswordView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ChangePasswordView.Designer.cs">
+      <DependentUpon>ChangePasswordView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\IAdminView.cs" />
     <Compile Include="Views\IAunthenticationView.cs" />
+    <Compile Include="Views\IPasswordView.cs" />
     <Compile Include="Views\IUserView.cs" />
+    <Compile Include="Views\CheckPasswordView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\CheckPasswordView.Designer.cs">
+      <DependentUpon>CheckPasswordView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +120,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Views\AdminView.resx">
       <DependentUpon>AdminView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ChangePasswordView.resx">
+      <DependentUpon>ChangePasswordView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CheckPasswordView.resx">
+      <DependentUpon>CheckPasswordView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\UserView.resx">
       <DependentUpon>UserView.cs</DependentUpon>

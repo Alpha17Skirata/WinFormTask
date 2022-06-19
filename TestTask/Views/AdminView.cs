@@ -22,6 +22,7 @@ namespace TestTask.Views
             };
             changeAdminRole.Click += delegate { BackEvent?.Invoke(this, EventArgs.Empty); };
             cancelBtn.Click += delegate { CancelEvent?.Invoke(this, EventArgs.Empty); };
+            changePasswordBtn.Click += delegate { ChangePasswordEvent?.Invoke(this, EventArgs.Empty); };
         }
 
         public string HumanName { get => textHumanName.Text; set => textHumanName.Text=value; }
@@ -37,6 +38,7 @@ namespace TestTask.Views
         public event EventHandler CancelEvent;
         public event EventHandler SaveEvent;
         public event EventHandler BackEvent;
+        public event EventHandler ChangePasswordEvent;
 
         private void AdminView_Load(object sender, EventArgs e)
         {

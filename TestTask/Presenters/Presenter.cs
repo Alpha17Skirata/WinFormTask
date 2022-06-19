@@ -14,23 +14,61 @@ namespace TestTask.Presenters
     public class Presenter
     {
         private ITaskRepository repository;
+        private IPasswordRepository passwordRepository;
+        private IPasswordView changePasswordView;
         private IAdminView adminView;
         private IUserView userView;
         private BindingSource bindingSource;
         private IEnumerable<UserFormViewModel> userFormViewModels;
 
-        public Presenter(ITaskRepository repository, IUserView userView, IAdminView adminView)
+        public Presenter(ITaskRepository repository, IPasswordRepository passwordRepository, IUserView userView, IAdminView adminView)
         {
             this.bindingSource = new BindingSource();
             this.repository = repository;
+            this.passwordRepository = passwordRepository;
             this.userView = userView;
             this.userView.SearchEvent += SearchHuman;
-            this.userView.BackEvent += BackUserPage;
+            this.userView.BackEvent += BackFromUserPage;
             this.userView.SetHumanListBindingSource(bindingSource);
             this.adminView = adminView;
             this.adminView.SaveEvent += SaveNewHuman;
-            this.adminView.BackEvent += BackAdminPage;
+            this.adminView.BackEvent += BackFromAdminPage;
             this.adminView.CancelEvent += CleanForms;
+            this.adminView.ChangePasswordEvent += OpenChangePasswordView;
+            changePasswordView = new ChangePasswordView();
+            changePasswordView.ChangePasswordEvent += ChangePassword;
+            changePasswordView.BackEvent += BackToAdminPage;
+        }
+
+        private void OpenChangePasswordView(object sender, EventArgs e)
+        {
+            adminView.Hide();
+            changePasswordView.Show();
+        }
+
+        private void BackToAdminPage(object sender, EventArgs e)
+        {
+            changePasswordView.Hide();
+            adminView.Show();
+        }
+
+        private void ChangePassword(object sender, EventArgs e)
+        {
+            var password = new Password();
+            password.Id = 1;
+            password.PasswordValue = changePasswordView.PasswordValue.Trim(' ');
+            try
+            {
+                passwordRepository.ChangePassword(password);
+                changePasswordView.Hide();
+                changePasswordView.Message = "Пароль изменен";
+                changePasswordView.PasswordValue = "";
+                adminView.Show();
+            }
+            catch (Exception ex)
+            {
+                changePasswordView.Message = ex.Message;
+            }
         }
 
         private void CleanForms(object sender, EventArgs e)
@@ -38,14 +76,14 @@ namespace TestTask.Presenters
             CleanViewFields();
         }
 
-        private void BackUserPage(object sender, EventArgs e)
+        private void BackFromUserPage(object sender, EventArgs e)
         {
             userView.Hide();
             IAunthenticationView aunthenticationView = Authentication.GetInstance();
             aunthenticationView.Show();
         }
 
-        private void BackAdminPage(object sender, EventArgs e)
+        private void BackFromAdminPage(object sender, EventArgs e)
         {
             adminView.Hide();
             IAunthenticationView aunthenticationView = Authentication.GetInstance();
