@@ -54,7 +54,7 @@ namespace TestTask.Presenters
 
         private void ChangePassword(object sender, EventArgs e)
         {
-            var password = new Password();
+            var password = new PasswordModel();
             password.Id = 1;
             password.PasswordValue = changePasswordView.PasswordValue.Trim(' ');
             try
@@ -138,22 +138,24 @@ namespace TestTask.Presenters
 
         private void SaveNewHuman(object sender, EventArgs e)
         {
-            var humanModel = new Human();
-            var addressModel = new Address();
+            var humanModel = new HumanModel();
+            var addressModel = new AddressModel();
+            var phoneNumberModel = new PhoneNumberModel();
             humanModel.Name = ToUpperFirstLetter(adminView.HumanName);
             humanModel.Surname = ToUpperFirstLetter(adminView.Surname);
             humanModel.MiddleName = ToUpperFirstLetter(adminView.MiddleName);
             humanModel.Birthday = DateTime.TryParse(adminView.Date, out _) ? Convert.ToDateTime(adminView.Date) : null;
-            humanModel.Number = adminView.Number;
-            humanModel.Flat = int.TryParse(adminView.HouseNumber, out _) ? Convert.ToInt32(adminView.HouseNumber) : null; 
+            humanModel.Flat = int.TryParse(adminView.Flat, out _) ? Convert.ToInt32(adminView.Flat) : null;
+            phoneNumberModel.Number = adminView.Number.Equals("") ? null : adminView.Number;
             addressModel.AddressName = adminView.Address.Trim(' ');
             addressModel.HouseNumber = int.TryParse(adminView.HouseNumber, out _) ? Convert.ToInt32(adminView.HouseNumber) : null;
             try
             {
                 ValidateData validation = new ValidateData();
-                validation.Validate(humanModel);
+                validation.Validate(humanModel); 
+                validation.Validate(phoneNumberModel);
                 validation.Validate(addressModel);
-                repository.Add(humanModel, addressModel);
+                repository.Add(humanModel, addressModel, phoneNumberModel);
                 adminView.Message = "Запись добавлена";
                 CleanViewFields();
             }

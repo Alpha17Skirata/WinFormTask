@@ -17,40 +17,27 @@ namespace TestTask.Repository
             this.connectionString = connectionString;
         }
 
-        public void Add(Human human, Address address)
+        public void Add(HumanModel humanModel, AddressModel addressModel, PhoneNumberModel phoneNumberModel)
         {
-            var dbPhoneNumbers = new List<string>();
-            var dbAddress = new List<Address>();
-            int id;
-            using (var connection = new SqlConnection(connectionString))
-            using (var command = new SqlCommand())
-            {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = "SELECT PhoneNumber FROM dbo.Humen WHERE PhoneNumber = @phoneNumberCheck";
-                command.Parameters.Add("@phoneNumberCheck", SqlDbType.NVarChar).Value = human.Number;
-                using (var reader = command.ExecuteReader())
+                var dbAddress = new List<AddressModel>();
+                int addressId;
+                int phoneNumberId = default(int);
+                string? phoneNumber = default(string?);
+                using (var connection = new SqlConnection(connectionString))
+                using (var command = new SqlCommand())
                 {
-                    while (reader.Read())
-                    {
-                        string phoneNumber = reader[0].ToString();
-                        dbPhoneNumbers.Add(phoneNumber);
-                    }
-                }
-                if (dbPhoneNumbers.Count != 0)
-                {
-                    throw new Exception("Такой номер уже есть в базе данных");
-                }
-                else
-                {
-                    command.CommandText = "SELECT * FROM dbo.Addresses WHERE Name=@AddressName AND House_number=@houseNumber;";
-                    command.Parameters.Add("@AddressName", SqlDbType.NVarChar).Value = address.AddressName;
-                    command.Parameters.Add("@houseNumber", SqlDbType.Int).Value = address.HouseNumber;
+                    connection.Open();
+                    command.Connection = connection;
+                    command.CommandText = "SELECT * FROM dbo.Addresses " +
+                                          "WHERE Name=@AddressName " +
+                                          "AND House_number=@houseNumber;";
+                    command.Parameters.Add("@AddressName", SqlDbType.NVarChar).Value = addressModel.AddressName;
+                    command.Parameters.Add("@houseNumber", SqlDbType.Int).Value = addressModel.HouseNumber;
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            var addressModel = new Address();
+                            var addressModelCheck = new AddressModel();
                             addressModel.Id = (int)reader[0];
                             addressModel.AddressName = reader[1].ToString();
                             addressModel.HouseNumber = (int)reader[2];
@@ -59,44 +46,132 @@ namespace TestTask.Repository
                     }
                     if (dbAddress.Count == 0)
                     {
-                        command.CommandText = "INSERT INTO dbo.Addresses values (@Address_name, @house_Number); SELECT CAST(scope_identity() AS int);";
-                        command.Parameters.Add("@Address_name", SqlDbType.NVarChar).Value = address.AddressName;
-                        command.Parameters.Add("@house_Number", SqlDbType.Int).Value = address.HouseNumber;
-                        id = (int)command.ExecuteScalar();
+                        command.CommandText = "INSERT INTO dbo.Addresses values (@Address_name, @house_Number); " +
+                                              "SELECT CAST(scope_identity() AS int);";
+                        command.Parameters.Add("@Address_name", SqlDbType.NVarChar).Value = addressModel.AddressName;
+                        command.Parameters.Add("@house_Number", SqlDbType.Int).Value = addressModel.HouseNumber;
+                        addressId = (int)command.ExecuteScalar();
+                        command.CommandText = "SELECT Id FROM dbo.Numbers " +
+                                              "WHERE Phone_number = @phoneNumberCheck;";
+                        command.Parameters.Add("@phoneNumberCheck", SqlDbType.NVarChar).Value = phoneNumberModel.Number;
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                phoneNumberId = (int)reader[0];
+                            }
+                        }
+                        if (phoneNumberId != 0)
+                        {
+                            throw new Exception("Такой номер уже привязан к другому адрессу");
+                        }
+                        else
+                        {
+                            command.CommandText = "INSERT INTO dbo.Numbers values (@phoneNumber); " +
+                                                  "SELECT CAST(scope_identity() AS int);";
+                            command.Parameters.Add("@phoneNumber", SqlDbType.NVarChar).Value = phoneNumberModel.Number;
+                            phoneNumberId = (int)command.ExecuteScalar();
+                            command.CommandText = "INSERT INTO dbo.Humen values (@name, @surname, @middlename, @birthday, @phoneNumberId, @addressId, @flat);";
+                            command.Parameters.Add("@name", SqlDbType.NVarChar).Value = humanModel.Name;
+                            command.Parameters.Add("@surname", SqlDbType.NVarChar).Value = humanModel.Surname;
+                            command.Parameters.Add("@middlename", SqlDbType.NVarChar).Value = humanModel.MiddleName;
+                            command.Parameters.Add("@birthday", SqlDbType.Date).Value = humanModel.Birthday;
+                            command.Parameters.Add("@phoneNumberId", SqlDbType.Int).Value = phoneNumberId;
+                            command.Parameters.Add("@addressId", SqlDbType.Int).Value = addressId;
+                            command.Parameters.Add("@flat", SqlDbType.Int).Value = humanModel.Flat;
+                            command.ExecuteNonQuery();
+                        }
                     }
                     else
                     {
-                        id = dbAddress.ElementAt(0).Id;
+                        addressId = dbAddress.ElementAt(0).Id;
+                        command.CommandText = "SELECT n.Id, n.Phone_number FROM dbo.Humen as h " +
+                                              "JOIN dbo.Numbers as n ON h.Number_id = n.Id " +
+                                              "WHERE h.Flat = @flat1 " +
+                                              "AND h.Address_id = @address_Id;";
+                        command.Parameters.Add("@flat1", SqlDbType.Int).Value = humanModel.Flat;
+                        command.Parameters.Add("@address_Id", SqlDbType.Int).Value = addressId;
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                phoneNumberId = (int)reader[0];
+                                phoneNumber = reader[1].ToString();
+                            }
+                        }
+                        if (phoneNumberId != 0)
+                        {
+                            if (phoneNumber.Equals(phoneNumberModel.Number))
+                            {
+                                command.CommandText = "INSERT INTO dbo.Humen values (@name1, @surname1, @middlename1, @birthday1, @phoneNumberId1, @address_Id1, @flat2);";
+                                command.Parameters.Add("@name1", SqlDbType.NVarChar).Value = humanModel.Name;
+                                command.Parameters.Add("@surname1", SqlDbType.NVarChar).Value = humanModel.Surname;
+                                command.Parameters.Add("@middlename1", SqlDbType.NVarChar).Value = humanModel.MiddleName;
+                                command.Parameters.Add("@birthday1", SqlDbType.Date).Value = humanModel.Birthday;
+                                command.Parameters.Add("@phoneNumberId1", SqlDbType.Int).Value = phoneNumberId;
+                                command.Parameters.Add("@address_Id1", SqlDbType.Int).Value = addressId;
+                                command.Parameters.Add("@flat2", SqlDbType.Int).Value = humanModel.Flat;
+                                command.ExecuteNonQuery();
+                            }
+                            else
+                            {
+                                throw new Exception("К этой квартире уже прикреплен другой номер");
+                            }
+                        }
+                        else
+                        {
+                            command.CommandText = "SELECT Id FROM dbo.Numbers " +
+                                                  "WHERE Phone_number = @phoneNumberCheck1;";
+                            command.Parameters.Add("@phoneNumberCheck1", SqlDbType.NVarChar).Value = phoneNumberModel.Number;
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    phoneNumberId = (int)reader[0];
+                                }
+                            }
+                            if (phoneNumberId != 0)
+                            {
+                                throw new Exception("Такой номер уже привязан к другой квартире");
+                            }
+                            else
+                            {
+                                command.CommandText = "INSERT INTO dbo.Numbers values (@phoneNumber1); " +
+                                                      "SELECT CAST(scope_identity() AS int);";
+                                command.Parameters.Add("@phoneNumber1", SqlDbType.NVarChar).Value = phoneNumberModel.Number;
+                                phoneNumberId = (int)command.ExecuteScalar();
+                                command.CommandText = "INSERT INTO dbo.Humen values (@name1, @surname1, @middlename1, @birthday1, @phoneNumberId1, @address_Id1, @flat2);";
+                                command.Parameters.Add("@name1", SqlDbType.NVarChar).Value = humanModel.Name;
+                                command.Parameters.Add("@surname1", SqlDbType.NVarChar).Value = humanModel.Surname;
+                                command.Parameters.Add("@middlename1", SqlDbType.NVarChar).Value = humanModel.MiddleName;
+                                command.Parameters.Add("@birthday1", SqlDbType.Date).Value = humanModel.Birthday;
+                                command.Parameters.Add("@phoneNumberId1", SqlDbType.Int).Value = phoneNumberId;
+                                command.Parameters.Add("@address_Id1", SqlDbType.Int).Value = addressId;
+                                command.Parameters.Add("@flat2", SqlDbType.Int).Value = humanModel.Flat;
+                                command.ExecuteNonQuery();
+                            }
+                        }
                     }
-                    command.CommandText = "INSERT INTO dbo.Humen values (@name, @surname, @middlename, @birthday, @phoneNumber, @addressId, @flat)";
-                    command.Parameters.Add("@name", SqlDbType.NVarChar).Value = human.Name;
-                    command.Parameters.Add("@surname", SqlDbType.NVarChar).Value = human.Surname;
-                    command.Parameters.Add("@middlename", SqlDbType.NVarChar).Value = human.MiddleName;
-                    command.Parameters.Add("@birthday", SqlDbType.Date).Value = human.Birthday;
-                    command.Parameters.Add("@phoneNumber", SqlDbType.NVarChar).Value = human.Number;
-                    command.Parameters.Add("@addressId", SqlDbType.Int).Value = id;
-                    command.Parameters.Add("@flat", SqlDbType.Int).Value = human.Flat;
-                    command.ExecuteNonQuery();
                 }
-            }
         }
 
 
         public IEnumerable<UserFormViewModel> SearchUsingConditions(UserFormViewModel model)
         {
             var humen = new List<UserFormViewModel>();
-
             using (var connection = new SqlConnection(connectionString))
             using (var command = new SqlCommand())
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "SELECT h.Name, h.Surname, h.Middle_name, h.Birthday, h.PhoneNumber, a.Name, a.House_number, h.Flat FROM dbo.Humen as h JOIN dbo.Addresses as a on h.Address_id=a.Id " +
+                command.CommandText = "SELECT h.Name, h.Surname, h.Middle_name, h.Birthday, n.Phone_number, a.Name, a.House_number, h.Flat FROM dbo.Humen as h " +
+                                      "JOIN dbo.Addresses as a ON h.Address_id = a.Id " +
+                                      "JOIN dbo.Numbers as n ON h.Number_id = n.Id " +
                                       "WHERE (h.Name = @humanName OR @humanName IS NULL) " +
                                       "AND (h.Surname = @surname OR @surname IS NULL) " +
                                       "AND (h.Middle_name = @middleName OR @middleName IS NULL) " +
                                       "AND (h.Birthday = @birthday OR @birthday IS NULL) " +
-                                      "AND (h.PhoneNumber = @phoneNumber OR @phoneNumber IS NULL) " +
+                                      "AND (n.Phone_number = @phoneNumber OR @phoneNumber IS NULL) " +
                                       "AND (a.Name = @addressName OR @addressName IS NULL) " +
                                       "AND (a.House_number = @houseNumber OR @houseNumber IS NULL) " +
                                       "AND (h.Flat = @flat OR @flat IS NULL);";

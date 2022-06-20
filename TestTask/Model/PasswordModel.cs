@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestTask.Model
 {
-    public class Password
+    public class PasswordModel
     {
         public int Id { get; set; }
         public string PasswordValue { get; set; }

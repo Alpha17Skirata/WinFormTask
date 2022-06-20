@@ -46,7 +46,7 @@ namespace TestTask.Repository
 
         private void CheckPasswordEvent(object sender, EventArgs e)
         {
-            var password = new Password();
+            var password = new PasswordModel();
             password.PasswordValue = checkPasswordView.PasswordValue.Trim(' ');
             try
             {

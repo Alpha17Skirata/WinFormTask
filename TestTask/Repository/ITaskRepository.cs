@@ -9,7 +9,7 @@ namespace TestTask.Repository
 {
     public interface ITaskRepository
     {
-        void Add(Human humanModel, Address address);
+        void Add(HumanModel humanModel, AddressModel address, PhoneNumberModel phoneNumberModel);
         IEnumerable<UserFormViewModel> SearchUsingConditions(UserFormViewModel model);
     }
 }

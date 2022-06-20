@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace TestTask.Model
 {
-    public class Address
+    public class AddressModel
     {
       public int Id { get; set; }
       [Required(ErrorMessage = "Введите название улицы")]

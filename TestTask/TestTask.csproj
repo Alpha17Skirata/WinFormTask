@@ -70,8 +70,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Address.cs" />
-    <Compile Include="Model\Password.cs" />
+    <Compile Include="Model\AddressModel.cs" />
+    <Compile Include="Model\PasswordModel.cs" />
+    <Compile Include="Model\PhoneNumberModel.cs" />
     <Compile Include="Model\UserFormViewModel.cs" />
     <Compile Include="Presenters\Presenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
@@ -87,7 +88,7 @@
     <Compile Include="Views\Authentication.Designer.cs">
       <DependentUpon>Authentication.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\Human.cs" />
+    <Compile Include="Model\HumanModel.cs" />
     <Compile Include="Views\AdminView.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -9,7 +9,7 @@ namespace TestTask.Repository
 {
     public interface IPasswordRepository
     {
-        bool CheckPassword(Password password);
-        void ChangePassword(Password password);
+        bool CheckPassword(PasswordModel password);
+        void ChangePassword(PasswordModel password);
     }
 }

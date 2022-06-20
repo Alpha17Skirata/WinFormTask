@@ -15,7 +15,7 @@ namespace TestTask.Repository
         {
             this.connectionString = connectionString;
         }
-        public bool CheckPassword(Password password)
+        public bool CheckPassword(PasswordModel password)
         {
             var passwords = new List<string>();
             using (var connection = new SqlConnection(connectionString))
@@ -44,7 +44,7 @@ namespace TestTask.Repository
             }
         }
 
-        public void ChangePassword(Password password)
+        public void ChangePassword(PasswordModel password)
         {
             using (var connection = new SqlConnection(connectionString))
             using (var command = new SqlCommand())
