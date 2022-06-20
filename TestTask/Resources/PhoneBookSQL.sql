@@ -4,6 +4,14 @@ CREATE TABLE Password(
 )
    GO
 
+
+CREATE TABLE Numbers(
+   Id int IDENTITY(1,1) primary key,
+   Phone_number varchar(10) NOT NULL UNIQUE,
+   )
+   GO
+
+
 CREATE TABLE Addresses(
    Id int IDENTITY(1,1) primary key,
    Name nvarchar(40) NOT NULL,
@@ -17,15 +25,14 @@ CREATE TABLE Humen (
    Surname nvarchar(25) NOT NULL, 
    Middle_name nvarchar(25) NOT NULL, 
    Birthday date NOT NULL, 
-   PhoneNumber nvarchar (10) NOT NULL UNIQUE, 
+   Number_id int references Numbers, 
    Address_id int references Addresses, 
    Flat int NOT NULL
    )
    GO
 
    CREATE INDEX name_surname_middlename_indx ON dbo.Humen (Name, Surname, Middle_name);
-   CREATE UNIQUE INDEX phone_indx ON dbo.Humen (PhoneNumber);
+   CREATE UNIQUE INDEX phone_indx ON dbo.Numbers (Phone_number);
    CREATE INDEX address_indx ON dbo.Humen (Address_id, Flat);
-   CREATE UNIQUE INDEX addressName_indx ON dbo.Addresses (Name, House_number);
  
    INSERT INTO dbo.Password values('123');
