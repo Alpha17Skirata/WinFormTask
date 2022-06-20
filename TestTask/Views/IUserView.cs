@@ -17,6 +17,8 @@ namespace TestTask.Views
         public string Address { get; set; }
         public string HouseNumber { get; set; }
         public string Flat { get; set; }
+        public bool IsSuccessful { get; set; }
+        public string Message { get; set; }
 
 
         event EventHandler SearchEvent;

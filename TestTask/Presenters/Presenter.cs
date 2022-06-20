@@ -92,17 +92,48 @@ namespace TestTask.Presenters
 
         private void SearchHuman(object sender, EventArgs e)
         {
-            var userFormViewModel = new UserFormViewModel();
-            userFormViewModel.Name = ToUpperFirstLetter(userView.HumanName);
-            userFormViewModel.Surname = ToUpperFirstLetter(userView.Surname);
-            userFormViewModel.MiddleName = ToUpperFirstLetter(userView.MiddleName);
-            userFormViewModel.Birthday = DateTime.TryParse(userView.Date, out _) ? Convert.ToDateTime(userView.Date) : null;
-            userFormViewModel.Number = userView.Number;
-            userFormViewModel.AddressName = userView.Address.Trim(' ');
-            userFormViewModel.HouseNumber = int.TryParse(userView.HouseNumber, out _) ? Convert.ToInt32(userView.HouseNumber) : null;
-            userFormViewModel.Flat = int.TryParse(userView.Flat, out _) ? Convert.ToInt32(userView.Flat) : null;
-            userFormViewModels = repository.SearchUsingConditions(userFormViewModel);
-            bindingSource.DataSource = userFormViewModels;
+            if (string.IsNullOrEmpty(userView.HumanName) &&
+                string.IsNullOrEmpty(userView.Surname) &&
+                string.IsNullOrEmpty(userView.MiddleName) &&
+                string.IsNullOrEmpty(userView.Date) &&
+                string.IsNullOrEmpty(userView.Number) &&
+                string.IsNullOrWhiteSpace(userView.Address) &&
+                string.IsNullOrEmpty(userView.HouseNumber) &&
+                string.IsNullOrEmpty(userView.Flat))
+            {
+                userView.IsSuccessful = true;
+            }
+            else
+            {
+                var userFormViewModel = new UserFormViewModel();
+                userFormViewModel.Name = ToUpperFirstLetter(userView.HumanName);
+                userFormViewModel.Surname = ToUpperFirstLetter(userView.Surname);
+                userFormViewModel.MiddleName = ToUpperFirstLetter(userView.MiddleName);
+                if (string.IsNullOrEmpty(userView.Date))
+                {
+                    userFormViewModel.Birthday = DateTime.TryParse(userView.Date, out _) ? Convert.ToDateTime(userView.Date) : null;
+                }
+                else
+                {
+                    try
+                    {
+                        userFormViewModel.Birthday = DateTime.Parse(userView.Date);
+                    }
+                    catch (FormatException ex)
+                    {
+                        userView.IsSuccessful = false;
+                        userView.Message = "Некорректный формат даты";
+                        return;
+                    }
+                }
+                userFormViewModel.Number = userView.Number;
+                userFormViewModel.AddressName = userView.Address.Trim(' ');
+                userFormViewModel.HouseNumber = int.TryParse(userView.HouseNumber, out _) ? Convert.ToInt32(userView.HouseNumber) : null;
+                userFormViewModel.Flat = int.TryParse(userView.Flat, out _) ? Convert.ToInt32(userView.Flat) : null;
+                userFormViewModels = repository.SearchUsingConditions(userFormViewModel);
+                userView.IsSuccessful = true;
+                bindingSource.DataSource = userFormViewModels;
+            }
         }
 
         private void SaveNewHuman(object sender, EventArgs e)

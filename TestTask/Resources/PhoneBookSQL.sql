@@ -1,10 +1,15 @@
+CREATE TABLE Password(
+   Id int IDENTITY(1,1) primary key,
+   Password_value nvarchar(40) NOT NULL,
+)
+   GO
+
 CREATE TABLE Addresses(
    Id int IDENTITY(1,1) primary key,
    Name nvarchar(40) NOT NULL,
    House_number int NOT NULL, 
    )
    GO
-
 
 CREATE TABLE Humen ( 
    Id int IDENTITY(1,1) primary key, 
@@ -23,3 +28,4 @@ CREATE TABLE Humen (
    CREATE INDEX address_indx ON dbo.Humen (Address_id, Flat);
    CREATE UNIQUE INDEX addressName_indx ON dbo.Addresses (Name, House_number);
  
+   INSERT INTO dbo.Password values('123');

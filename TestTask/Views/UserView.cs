@@ -12,7 +12,10 @@ using TestTask.Views;
 namespace TestTask
 {
     public partial class UserView : Form, IUserView
+
     {
+        private string message;
+        private bool isSuccessful;
         private TextBox[] textBoxes;
         public UserView()
         {
@@ -22,7 +25,13 @@ namespace TestTask
 
         private void AssociateAndRaiseViewEvents()
         {
-            searchButton.Click += delegate { SearchEvent?.Invoke(this, EventArgs.Empty); };
+            searchButton.Click += delegate { 
+                SearchEvent?.Invoke(this, EventArgs.Empty);
+                if (isSuccessful == false)
+                {
+                    MessageBox.Show(message);
+                }
+            };
             changeUserRole.Click += delegate { BackEvent?.Invoke(this, EventArgs.Empty); };
         }
 
@@ -34,6 +43,8 @@ namespace TestTask
         public string Address { get => textAddress.Text; set => textAddress.Text = value; }
         public string HouseNumber { get => textHouseNumber.Text; set => textHouseNumber.Text = value; }
         public string Flat { get => textFlat.Text; set => textFlat.Text = value; }
+        public bool IsSuccessful { get => isSuccessful; set => isSuccessful = value; }
+        public string Message { get => message; set => message = value; }
 
         public event EventHandler SearchEvent;
         public event EventHandler BackEvent;
@@ -122,10 +133,6 @@ namespace TestTask
             if (!((character >= 'А' && character <= 'я') || character == 'ё' || character == 'Ё') && character != 8)
             {
                 e.Handled = true;
-            }
-            if (textNumber.Text.Length == 1)
-            {
-                e.KeyChar = Char.ToUpper(e.KeyChar);
             }
         }
 
